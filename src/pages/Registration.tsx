@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { registerUser } from '../service/User';
+import { Link } from 'react-router-dom';
+
 
 const Registration = () => {
   const [username, setUsername] = useState<string>('');
@@ -9,6 +11,7 @@ const Registration = () => {
   const [fullName, setFullName] = useState<string>('');
   const [avatar, setAvatar] = useState<File | null>(null);
   const [avatarPreviewUrl, setAvatarPreviewUrl] = useState<string>('');
+
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -52,11 +55,11 @@ const Registration = () => {
           <label className='w-full flex flex-col justify-start items-start '>
             Email:
           </label>
-          <input className='w-1/2 p-1 rounded-md bg-gray-200' type="text" placeholder='Username' value={email} onChange={(e) => setEmail(e.target.value)} />
+          <input className='w-1/2 p-1 rounded-md bg-gray-200' type="text" placeholder='Email' value={email} onChange={(e) => setEmail(e.target.value)} />
           <label className='w-full flex flex-col justify-start items-start '>
             Name:
           </label>
-          <input className='w-1/2 p-1 rounded-md bg-gray-200' type="text" placeholder='Password' value={fullName} onChange={(e) => setFullName(e.target.value)} />
+          <input className='w-1/2 p-1 rounded-md bg-gray-200' type="text" placeholder='Full Name' value={fullName} onChange={(e) => setFullName(e.target.value)} />
           <label className='w-full flex flex-col justify-start items-start '>
             Password:
           </label>
@@ -64,7 +67,7 @@ const Registration = () => {
           <label className='w-full flex flex-col justify-start items-start '>
             Confirm Password:
           </label>
-          <input className='w-1/2 p-1 rounded-md bg-gray-200' type="password" placeholder='Password' value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
+          <input className='w-1/2 p-1 rounded-md bg-gray-200' type="password" placeholder='Confirm Password' value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
           <label className='w-full flex flex-col justify-start items-start '>
             Avatar:
           </label>
@@ -75,6 +78,9 @@ const Registration = () => {
             </div>
           )}
           <button className='border-2 border-purple-200 bg-purple-100 rounded-lg w-full p-1 font-semibold my-3 hover:bg-purple-300' type="submit">Sign Up</button>
+          <Link to='/login' className='text-black hover:text-gray-700'>
+            Already have an account? Login
+          </Link>
         </form>
       </div>
     </div>

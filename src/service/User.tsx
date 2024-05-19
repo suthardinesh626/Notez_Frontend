@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:8000/api/v1/users'; 
+const API_URL = 'http://localhost:8000/api/v1/users';
 
 const registerUser = async (userData: {
     username: string;
@@ -46,17 +46,16 @@ const loginUser = async (userData: {
     }
 };
 
-
 const logoutUser = async () => {
     try {
-      const response = await axios.post(`${API_URL}/logout`);
-  
-      return response.data;
+        const response = await axios.post(`${API_URL}/logout`);
+        // console.log(response)
+        return response.data;
     } catch (error) {
-      console.error('Error logging out user', error);
-      throw error;
+        console.error('Error while logging out user', error);
+        throw error;
     }
-  };
+};
 
 
 export { registerUser, loginUser, logoutUser };

@@ -1,21 +1,43 @@
+import { Route, Routes } from 'react-router-dom';
 import './App.css';
 import Navbar from './components/Navbar';
-import Sidebar from './components/Sidebar';
 import Login from './pages/Login';
-import Notes from './pages/Notes';
 import Registration from './pages/Registration';
+import Dashboard from './pages/Dashboard';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+
+
+import Error from './components/Error';
+
+const router = createBrowserRouter(
+  [
+    {
+      path: "/register",
+      element: <Registration />,
+      errorElement: <Error />
+    },
+    {
+      path: "/",
+      element: <Login />,
+      errorElement: <Error />
+    },
+    {
+      path:"/login",
+      element:<Login />
+    },
+    {
+      path:"/dashboard",
+      element:<Dashboard />
+    }
+  ]
+);
 
 const App = () => {
   return (
     <>
       <Navbar />
-      <div className=''>
-        {/* <Sidebar /> */}
-        <Notes />
-        <Login/>
-        <Registration/>
-      </div>
-
+      <RouterProvider router={router} />
+    
     </>
   )
 }
