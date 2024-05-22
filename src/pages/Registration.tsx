@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { registerUser } from '../service/User';
-import { Link } from 'react-router-dom';
+import { registerUser } from '../service/userService';
+import { Link, useNavigate } from 'react-router-dom';
 
 
 const Registration = () => {
@@ -11,6 +11,7 @@ const Registration = () => {
   const [fullName, setFullName] = useState<string>('');
   const [avatar, setAvatar] = useState<File | null>(null);
   const [avatarPreviewUrl, setAvatarPreviewUrl] = useState<string>('');
+  const navigate = useNavigate()
 
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -18,6 +19,7 @@ const Registration = () => {
 
     if (!username || !fullName || !avatar || !confirmPassword || !password || !email) {
       alert('Please fill in all fields');
+
       return;
     }
     if (password !== confirmPassword) {
@@ -27,6 +29,8 @@ const Registration = () => {
 
     try {
       await registerUser({ username, fullName, avatar, email, password });
+      navigate('/');
+
     } catch (error) {
       console.error(error);
     }

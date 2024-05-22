@@ -22,12 +22,8 @@ const router = createBrowserRouter(
       errorElement: <Error />
     },
     {
-      path:"/login",
-      element:<Login />
-    },
-    {
-      path:"/dashboard",
-      element:<Dashboard />
+      path: "/dashboard",
+      element: <Dashboard />
     }
   ]
 );
@@ -37,7 +33,6 @@ const App = () => {
     <>
       <Navbar />
       <RouterProvider router={router} />
-    
     </>
   )
 }

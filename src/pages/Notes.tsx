@@ -1,27 +1,72 @@
-import React from 'react'
-import { useState } from 'react'
+import React, { useState, FormEvent, useEffect } from 'react';
+import { createNote } from '../service/noteService';
 
-const Notes = () => {
-    const [notesText, setNotesText] = useState<string>("");
 
+const DataForm: React.FC = () => {
+    const [title, setTitle] = useState<string>('');
+    const [content, setContent] = useState<string>('');
+    const [loading, setLoading] = useState<boolean>(false);
+    const [error, setError] = useState<string | null>(null);
+    const [success, setSuccess] = useState<boolean>(false);
+
+    //storing data in database.
+    const handleSubmit = async (event: FormEvent) => {
+        event.preventDefault();
+        setLoading(true);
+        setError(null);
+        setSuccess(false);
+
+        try {
+            const status = await createNote(title, content);
+            setSuccess(true);
+        } catch (err) {
+            if (err instanceof Error) {
+                setError(err.message);
+            } else {
+                setError('An unexpected error occurred');
+            }
+        } finally {
+            setLoading(false);
+        }
+    };
 
     return (
         <>
-            <div className='flex flex-row justify-start items-center p-10 '>
-                <div className='w-1/6  border-2 rounded-lg bg-slate-100 p-3 m-4'>
-                    <div className='flex flex-row justify-between'>
-                        <h3 className='text-2xl font-bold opacity-20'>Title</h3>
-                        <button>
-                            <img className='w-7 h-7' src='https://img.icons8.com/color/48/000000/pin.png' />
-                        </button>
-                    </div>
-                    <div className='w-full'>
-                        <textarea name=""  id="" placeholder='Create you notes' ></textarea>
-                    </div>
-                </div>
-            </div>
-        </>
-    )
-}
 
-export default Notes
+            <div className='flex flex-col p-3 border-2 w-4/12 rounded-lg'>
+                <form className='border-2 p-3 rounded-xl bg-gray-200 ' onSubmit={handleSubmit}>
+                    <div className='w-full underline my-2' >
+                        <input
+                            className='w-full my-2 bg-gray-200 border focus:outline-none focus:ring-0'
+                            type="text"
+                            value={title}
+                            onChange={(e) => setTitle(e.target.value)}
+                            placeholder='Enter Title'
+                            required
+                        />
+                    </div>
+                    <div>
+                        <textarea
+                            className='w-full my-1 bg-gray-200 border focus:outline-none focus:ring-0'
+                            value={content}
+                            placeholder='Enter content'
+                            onChange={(e) => setContent(e.target.value)}
+                            required
+                        />
+                    </div>
+
+                    <button className='border-2 p-2 rounded-lg bg-purple-300 hover:shadow-md focus:outline-none focus:ring-0 ' type="submit" disabled={loading}>
+                        {loading ? 'Sending...' : 'Submit'}
+                    </button>
+                    {/* from  where this error is coming  */}
+                    {error && <div style={{ color: 'red', fontSize: '17px' }}>Error: {error}</div>}
+                    {success && <div style={{ color: 'purple', fontSize: '17px' }}>Note saved!</div>}
+                </form>
+            </div>
+
+
+        </>
+    );
+};
+
+export default DataForm;

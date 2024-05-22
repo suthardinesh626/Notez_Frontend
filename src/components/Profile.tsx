@@ -1,5 +1,5 @@
 import React from 'react'
-import { logoutUser } from '../service/User'
+import { logoutUser } from '../service/userService'
 
 
 const Profile = () => {

@@ -38,18 +38,33 @@ const loginUser = async (userData: {
 }) => {
     try {
         const response = await axios.post(`${API_URL}/login`, userData);
+        // console.log(response);
 
+        const { accessToken, refreshToken } = response.data.data;
+
+
+        console.log("authorization token ", accessToken, refreshToken);
+        localStorage.setItem('accessToken', accessToken);
+        localStorage.setItem('refreshToken', refreshToken);
         return response.data;
     } catch (error) {
         console.error('Error logging in user', error);
         throw error;
-    }
+    }   
 };
 
-const logoutUser = async () => {
+const logoutUser = async (): Promise<any> => {
     try {
-        const response = await axios.post(`${API_URL}/logout`);
-        // console.log(response)
+        const response = await axios.post(`${API_URL}/logout`, {}, {
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+            }
+        });
+
+        // Remove the tokens from localStorage
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
+
         return response.data;
     } catch (error) {
         console.error('Error while logging out user', error);

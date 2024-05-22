@@ -1,13 +1,14 @@
 import { useState } from 'react';
-import { loginUser } from '../service/User';
-import { Link, redirect } from 'react-router-dom';
+import { loginUser } from '../service/userService';
+import { Link, redirect, useNavigate } from 'react-router-dom';
+import Dashboard from './Dashboard';
 
 const Login = () => {
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false)
-
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -15,7 +16,6 @@ const Login = () => {
     if (!username || !password) {
       alert('Please fill in all fields');
       return;
-
     }
 
     try {
@@ -27,12 +27,12 @@ const Login = () => {
 
       const response = await loginUser(userData);
 
-      if (response.success) {
-        alert('Login successful');
-        setIsLoggedIn(true);
-        
-        return redirect('/dashboard')
 
+      if (response.success) {
+        console.log(response.success);
+        // alert('Login successful');
+        setIsLoggedIn(true);
+        navigate('/dashboard');
       } else {
         alert('Invalid username or password');
       }
