@@ -1,5 +1,6 @@
 import React, { useState, FormEvent, useEffect } from 'react';
-import { createNote } from '../service/noteService';
+import { createNote, getNotes } from '../service/noteService';
+import UpdateNote from '../components/UpdateNote';
 
 
 const DataForm: React.FC = () => {
@@ -9,7 +10,7 @@ const DataForm: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState<boolean>(false);
 
-    //storing data in database.
+
     const handleSubmit = async (event: FormEvent) => {
         event.preventDefault();
         setLoading(true);
@@ -19,6 +20,7 @@ const DataForm: React.FC = () => {
         try {
             const status = await createNote(title, content);
             setSuccess(true);
+            // await getNotes();
         } catch (err) {
             if (err instanceof Error) {
                 setError(err.message);
@@ -34,6 +36,8 @@ const DataForm: React.FC = () => {
         <>
 
             <div className='flex flex-col p-3 border-2 w-4/12 rounded-lg'>
+
+
                 <form className='border-2 p-3 rounded-xl bg-gray-200 ' onSubmit={handleSubmit}>
                     <div className='w-full underline my-2' >
                         <input
@@ -54,7 +58,6 @@ const DataForm: React.FC = () => {
                             required
                         />
                     </div>
-
                     <button className='border-2 p-2 rounded-lg bg-purple-300 hover:shadow-md focus:outline-none focus:ring-0 ' type="submit" disabled={loading}>
                         {loading ? 'Sending...' : 'Submit'}
                     </button>
@@ -63,7 +66,6 @@ const DataForm: React.FC = () => {
                     {success && <div style={{ color: 'purple', fontSize: '17px' }}>Note saved!</div>}
                 </form>
             </div>
-
 
         </>
     );

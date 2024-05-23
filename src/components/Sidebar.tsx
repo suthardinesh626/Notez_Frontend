@@ -1,5 +1,5 @@
 import { useEffect, useState, FormEvent } from "react";
-import { createNote, getNotes, deleteNote } from '../service/noteService';
+import { createNote, getNotes } from '../service/noteService';
 
 const Sidebar = () => {
     const [title, setTitle] = useState<string>('');

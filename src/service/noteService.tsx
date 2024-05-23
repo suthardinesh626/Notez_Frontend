@@ -1,20 +1,21 @@
 import axios from 'axios';
 
 // Base URL of your API
-const API_URL = 'http://localhost:8000/api/v1/note'; // Adjust the port and URL as needed
+const API_URL = 'http://localhost:8000/api/v1/note';
 
 interface ApiResponse {
   message: string;
-  // Add other fields as needed
 }
 interface Note {
-  _id: string;
+  id: string;
   title: string;
   content: string;
   user: string;
-  // Add other fields as needed
 }
 
+interface UpdateNoteResponse extends ApiResponse {
+  note: Note;
+}
 const createNote = async (title: string, content: string): Promise<ApiResponse> => {
   try {
     const token = localStorage.getItem('accessToken');
@@ -60,17 +61,37 @@ const getNotes = async (): Promise<Note[]> => {
   }
 };
 
+const deleteNote = async (id: string): Promise<void> => {
+    try {
+        const token = localStorage.getItem('accessToken');
+        if (!token) {
+            throw new Error('Authentication token not found');
+        }
+
+        const response = await axios.delete(`${API_URL}/deletenote/${id}`, {
+            headers: {
+                'Authorization': `${token}`
+            }
+        });
+
+        // console.log(response.data.message);
+    } catch (error) {
+        console.error('Error deleting note:', error);
+        throw error;
+    }
+};
+
+//write here code for update note here API_URL is mentioned :  /updatenote/:id 
 
 
-//write a code for updating the note 
-const updateNote = async (id: string, title: string, content: string): Promise<ApiResponse> => {
+const updateNote = async (id: string, title: string, content: string): Promise<UpdateNoteResponse> => {
   try {
     const token = localStorage.getItem('accessToken');
     if (!token) {
       throw new Error('Authentication token not found');
     }
 
-    const response = await axios.put<ApiResponse>(`${API_URL}/updatenote/${id}`, {
+    const response = await axios.put<UpdateNoteResponse>(`${API_URL}/updatenote/${id}`, {
       title,
       content,
     }, {
@@ -78,12 +99,12 @@ const updateNote = async (id: string, title: string, content: string): Promise<A
         'Authorization': `${token}`
       }
     });
+
     return response.data;
   } catch (error) {
     console.error('Error updating note:', error);
     throw error;
   }
 };
-
-export { createNote, getNotes,  updateNote };
+export { createNote, getNotes, deleteNote, updateNote }
 

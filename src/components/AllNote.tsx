@@ -1,74 +1,49 @@
 import React, { useState, useEffect } from "react";
-import { getNotes } from "../service/noteService";
+import { getNotes, deleteNote } from "../service/noteService";
 
 
 
-const AllNote = () => {
-    const [notes, setNotes] = useState<Note[]>([]); // Use Note type here
-    const [loading, setLoading] = useState<boolean>(false);
-    const [error, setError] = useState<string | null>(null);
-    const [success, setSuccess] = useState<boolean>(false);
+const AllNote: React.FC = () => {
+    const [notes, setNotes] = useState<Array<{ title: string; content: string; id: string }>>([]);
 
     const fetchNotes = async () => {
         try {
-            setLoading(true);
-            const data = await getNotes();
-            setNotes(data);
-            setLoading(false);
-            setSuccess(false);  // Reset success state after fetching notes
-        } catch (err) {
-            setLoading(false);
-            if (err instanceof Error) {
-                setError(err.message);
-            } else {
-                setError('An unexpected error occurred');
-            }
+            const fetchedNotes = await getNotes();
+            setNotes(fetchedNotes);
+        } catch (error) {
+            console.error("Failed to load notes:", error);
         }
     };
-
 
     useEffect(() => {
         fetchNotes();
     }, []);
 
-    useEffect(() => {
-        if (success) {
+    const handleDelete = async (noteId: string) => {
+        try {
+            await deleteNote(noteId);
             fetchNotes();
+        } catch (error) {
+            console.error("Failed to delete note:", error);
         }
-    }, [success]);
+    };
 
     return (
-        <div className='w-full p-6'>
-            <h2 className='text-xl font-bold text-purple-500'>Notes</h2>
-            <div className='flex flex-col w-full'>
-                {loading ? (
-                    <p>Loading...</p>
-                ) : notes.length === 0 ? (
-                    <p>No notes available</p>
-                ) : (
-                    <div className='flex flex-row flex-wrap justify-start p-3 h-2/3'>
-                        {notes.map((note) => (
-                            <div key={note._id} className='w-1/4 border p-1 my-2 mx-2 rounded-xl hover:shadow-xl'>
-                                <div className='flex justify-end'>
-                                    <button
-                                        className='bg-red-500 text-white p-1 rounded'
-                                 
-                                    >
-                                        Delete
-                                    </button>
-
-                                </div>
-                                <div className='p-3'>
-                                    <h3 className='font-bold'>{note.title}</h3>
-                                    <p>{note.content}</p>
-                                </div>
-                            </div>
-                        ))}
+        <div className='w-full flex flex-row flex-wrap justify-start items-start p-6 '>
+            {/* 1st step here the Note will be clicked then it will ne  */}
+            {notes.length > 0 ? (
+                notes.map((note) => (
+                    <div key={note.id} className='w-4/12 flex flex-col justify-start items-end m-4 p-2 border-2 rounded-2xl cursor-pointer '>
+                        <button onClick={() => handleDelete(note.id)} className="w-4/12 text-white bg-red-400  border m-2 p-1 rounded-xl">Delete</button>
+                        <div className="w-full flex flex-col items-start p-2">
+                            <h3 className="text-gray-700 font-extrabold " >{note.title}</h3>
+                            <p className="text-gray-800 font-medium" >{note.content}</p>
+                        </div>
                     </div>
-                )}
-
-                {error && <p className='text-red-500'>{error}</p>}
-            </div>
+                ))
+            ) : (
+                <p>No notes available.</p>
+            )}
         </div>
     );
 };
