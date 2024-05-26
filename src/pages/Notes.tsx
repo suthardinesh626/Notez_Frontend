@@ -1,6 +1,6 @@
 import React, { useState, FormEvent, useEffect } from 'react';
 import { createNote, getNotes } from '../service/noteService';
-import UpdateNote from '../components/UpdateNote';
+
 
 
 const DataForm: React.FC = () => {
@@ -35,9 +35,7 @@ const DataForm: React.FC = () => {
     return (
         <>
 
-            <div className='flex flex-col p-3 border-2 w-4/12 rounded-lg'>
-
-
+            <div className='flex flex-col p-3 w-4/12 rounded-lg'>
                 <form className='border-2 p-3 rounded-xl bg-gray-200 ' onSubmit={handleSubmit}>
                     <div className='w-full underline my-2' >
                         <input
@@ -61,12 +59,11 @@ const DataForm: React.FC = () => {
                     <button className='border-2 p-2 rounded-lg bg-purple-300 hover:shadow-md focus:outline-none focus:ring-0 ' type="submit" disabled={loading}>
                         {loading ? 'Sending...' : 'Submit'}
                     </button>
-                    {/* from  where this error is coming  */}
                     {error && <div style={{ color: 'red', fontSize: '17px' }}>Error: {error}</div>}
                     {success && <div style={{ color: 'purple', fontSize: '17px' }}>Note saved!</div>}
                 </form>
             </div>
-
+            
         </>
     );
 };

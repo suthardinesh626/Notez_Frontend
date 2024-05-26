@@ -6,10 +6,10 @@ const Dashboard = () => {
     return (
         <>
             <div className='flex flex-row justify-between my-6 p-4'>
-                <div className='w-1/4 border-2 ' >
+                <div className='w-1/4 border-r-2' >
                     <Sidebar />
                 </div>
-                <div className='w-3/4 border-2 p-1' >
+                <div className='w-3/4 p-1' >
                     <Notes />
                     <AllNote />
                 </div>

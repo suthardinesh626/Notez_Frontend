@@ -30,27 +30,29 @@ const registerUser = async (userData: {
     }
 };
 
+//this is login function , is serice file 
 const loginUser = async (userData: {
     username: string;
     password: string;
-    email: string
+    email: string;
 
 }) => {
     try {
         const response = await axios.post(`${API_URL}/login`, userData);
-        // console.log(response);
+        console.log(response);
 
-        const { accessToken, refreshToken } = response.data.data;
+        const { accessToken, refreshToken, user } = response.data.data;
 
-
-        console.log("authorization token ", accessToken, refreshToken);
+        // Store tokens and user data
         localStorage.setItem('accessToken', accessToken);
         localStorage.setItem('refreshToken', refreshToken);
-        return response.data;
+        localStorage.setItem('user', JSON.stringify(user)); // Save user data
+
+        return { success: true, user }; // Return user data along with success status
     } catch (error) {
         console.error('Error logging in user', error);
         throw error;
-    }   
+    }
 };
 
 const logoutUser = async (): Promise<any> => {
@@ -72,5 +74,10 @@ const logoutUser = async (): Promise<any> => {
     }
 };
 
+const isAuthenticated = () => {
+    return !!localStorage.getItem('accessToken');
+};
 
-export { registerUser, loginUser, logoutUser };
+
+
+export { registerUser, loginUser, logoutUser, isAuthenticated };

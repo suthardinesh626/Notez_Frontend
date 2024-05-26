@@ -1,40 +1,28 @@
-import { Route, Routes } from 'react-router-dom';
-import './App.css';
+// App.tsx
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Login from './pages/Login';
 import Registration from './pages/Registration';
 import Dashboard from './pages/Dashboard';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import ErrorPage from './components/Error'; // Adjust the import path as necessary
+import { AuthProvider } from './context/AuthContext'
 
-
-import Error from './components/Error';
-
-const router = createBrowserRouter(
-  [
-    {
-      path: "/register",
-      element: <Registration />,
-      errorElement: <Error />
-    },
-    {
-      path: "/",
-      element: <Login />,
-      errorElement: <Error />
-    },
-    {
-      path: "/dashboard",
-      element: <Dashboard />
-    }
-  ]
-);
 
 const App = () => {
   return (
-    <>
-      <Navbar />
-      <RouterProvider router={router} />
-    </>
-  )
-}
+    <AuthProvider>
+      <Router>
+        <Navbar />
+        <Routes>
+          <Route path="/register" element={<Registration />} />
+          <Route path="/" element={<Login />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="*" element={<ErrorPage />} />
+        </Routes>
+      </Router>
+    </AuthProvider>
+  );
+};
 
 export default App;

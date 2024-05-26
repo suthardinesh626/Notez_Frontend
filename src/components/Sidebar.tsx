@@ -9,27 +9,6 @@ const Sidebar = () => {
     const [success, setSuccess] = useState<boolean>(false);
     const [notes, setNotes] = useState<any[]>([]);
 
-    //storing data in database.
-    const handleSubmit = async (event: FormEvent) => {
-        event.preventDefault();
-        setLoading(true);
-        setError(null);
-        setSuccess(false);
-
-        try {
-            const status = await createNote(title, content);
-            setSuccess(true);
-        } catch (err) {
-            if (err instanceof Error) {
-                setError(err.message);
-            } else {
-                setError('An unexpected error occurred');
-            }
-        } finally {
-            setLoading(false);
-        }
-    };
-    //code for getting data from database
     const fetchNotes = async () => {
         try {
             const data = await getNotes();
@@ -44,9 +23,12 @@ const Sidebar = () => {
         }
     };
 
-
     useEffect(() => {
         fetchNotes();
+        // Refetch every 10 seconds
+        const intervalId = setInterval(fetchNotes, 10000);
+        // Cleanup function to clear the interval when the component unmounts
+        return () => clearInterval(intervalId);
     }, []);
 
     useEffect(() => {
@@ -56,12 +38,11 @@ const Sidebar = () => {
         }
     }, [success]);
 
-
     return (
         <>
             <div className=" w-full flex flex-col p-9 ">
                 <h5 className="text-3xl font-extrabold text-purple-500 ">Titles</h5>
-                {notes.length === 0 ? (
+                {notes.length === 0? (
                     <p>No notes available</p>
                 ) : (
                     <div className='w-full  flex flex-col justify-center  flex-wrap  h-2/3 '>
@@ -77,4 +58,4 @@ const Sidebar = () => {
     )
 }
 
-export default Sidebar
+export default Sidebar;

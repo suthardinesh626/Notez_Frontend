@@ -22,7 +22,8 @@ const Login = () => {
       const userData = {
         username: username,
         password: password,
-        email: email
+        email: email,
+
       };
 
       const response = await loginUser(userData);

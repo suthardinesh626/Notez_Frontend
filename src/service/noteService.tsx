@@ -81,9 +81,6 @@ const deleteNote = async (id: string): Promise<void> => {
     }
 };
 
-//write here code for update note here API_URL is mentioned :  /updatenote/:id 
-
-
 const updateNote = async (id: string, title: string, content: string): Promise<UpdateNoteResponse> => {
   try {
     const token = localStorage.getItem('accessToken');

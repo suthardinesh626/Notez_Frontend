@@ -1,29 +1,43 @@
-import React from 'react'
-import { logoutUser } from '../service/userService'
-
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 const Profile = () => {
+    const { isAuthenticated, user, logout } = useAuth();
+    const navigate = useNavigate();
 
     const handleLogout = async () => {
         try {
-            const response = await logoutUser();
-
-            if (response.success) {
-                alert('Logout successful');
-            } else {
-                alert('Failed to logout');
-            }
+            await logout();
+            navigate('/');
         } catch (error) {
-            console.error('Error logging out user', error);
+            console.error('Error during logout:', error);
         }
     };
 
     return (
-        <div className='w-full h-full flex flex-col  justify-center items-center  '>
-            <img src="" alt="" />
-            <button className='border-2 border-purple-200 bg-purple-100 rounded-lg w-full p-2 font-semibold my-3 hover:bg-purple-300 ' type="submit" onClick={handleLogout}>Logout</button>
-        </div>
-    )
-}
+        <div className='w-full h-full flex flex-row justify-center items-center '>
 
-export default Profile
+            {/* make this div dropdown menu */}
+            <div className='h-full'>
+                {isAuthenticated && user ? (
+                    <div className='flex flex-row justify-end items-center mx-10 gap-x-20 '>
+                        <h1 className='w-10 h-10 font-bold content-center text-gray-700 text-xl' >{user.fullName}</h1>
+                        <img className='w-9 rounded-full' src={user.avatar} alt={user.fullName} />
+                    </div>
+                ) : (
+                    <p></p>
+                )}
+            </div>
+
+            <div className=''>
+                {isAuthenticated ? (
+                    <button className=' border-2 border-purple-200 bg-purple-100 rounded-lg w-full p-2 font-semibold my-3 hover:bg-purple-300' onClick={handleLogout}>Logout</button>
+                ) : null}
+            </div>
+
+
+        </div>
+    );
+};
+
+export default Profile;
