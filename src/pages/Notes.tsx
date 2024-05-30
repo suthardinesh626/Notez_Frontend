@@ -35,11 +35,11 @@ const DataForm: React.FC = () => {
     return (
         <>
 
-            <div className='flex flex-col p-3 w-4/12 rounded-lg'>
+            <div className='min-w-full flex flex-col p-3 w-4/12 rounded-lg'>
                 <form className='border-2 p-3 rounded-xl bg-gray-200 ' onSubmit={handleSubmit}>
                     <div className='w-full underline my-2' >
                         <input
-                            className='w-full my-2 bg-gray-200 border focus:outline-none focus:ring-0'
+                            className='w-full my-2 bg-gray-200 font-bold focus:outline-none focus:ring-0'
                             type="text"
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
@@ -49,21 +49,21 @@ const DataForm: React.FC = () => {
                     </div>
                     <div>
                         <textarea
-                            className='w-full my-1 bg-gray-200 border focus:outline-none focus:ring-0'
+                            className='w-full my-1 bg-gray-200 border font-bold focus:outline-none focus:ring-0'
                             value={content}
                             placeholder='Enter content'
                             onChange={(e) => setContent(e.target.value)}
                             required
                         />
                     </div>
-                    <button className='border-2 p-2 rounded-lg bg-purple-300 hover:shadow-md focus:outline-none focus:ring-0 ' type="submit" disabled={loading}>
+                    <button className='border-2 p-2 rounded-lg bg-purple-300 font-bold hover:shadow-md  focus:outline-none focus:ring-0 ' type="submit" disabled={loading}>
                         {loading ? 'Sending...' : 'Submit'}
                     </button>
                     {error && <div style={{ color: 'red', fontSize: '17px' }}>Error: {error}</div>}
                     {success && <div style={{ color: 'purple', fontSize: '17px' }}>Note saved!</div>}
                 </form>
             </div>
-            
+
         </>
     );
 };

@@ -8,7 +8,6 @@ const AllNote: React.FC = () => {
     const [editContent, setEditContent] = useState('');
     const [showFullContent, setShowFullContent] = useState<{ [key: string]: boolean }>({});
 
-
     const fetchNotes = async () => {
         try {
             const fetchedNotes = await getNotes();
@@ -25,11 +24,9 @@ const AllNote: React.FC = () => {
         }));
     };
 
-
     useEffect(() => {
         fetchNotes();
-        const intervalId = setInterval(fetchNotes, 10000);
-        // Cleanup function to clear the interval when the component unmounts
+        const intervalId = setInterval(fetchNotes, 1000);
         return () => clearInterval(intervalId);
     }, []);
 
@@ -51,25 +48,25 @@ const AllNote: React.FC = () => {
     const saveEdit = async (noteId: string) => {
         try {
             await updateNote(noteId, editTitle, editContent);
-            setEditingNoteId(null); // Exit editing mode
-            fetchNotes(); // Refresh notes list
+            setEditingNoteId(null);
+            fetchNotes();
         } catch (error) {
             console.error("Failed to update note:", error);
         }
     };
 
     return (
-        <div className='w-full flex flex-row flex-wrap justify-start items-start p-6 '>
+        <div className='w-full flex flex-row flex-wrap justify-start items-start p-4'>
             {notes.length > 0 ? (
                 notes.map((note) => (
                     <div
                         key={note.id}
-                        className='w-4/12 flex flex-col justify-start items-end m-4 p-2 border-2 rounded-2xl cursor-pointer hover:shadow-xl'
+                        className='w-full sm:w-1/2 md:w-1/3 lg:w-1/4 flex flex-col justify-start items-end m-2 p-2 border-2 rounded-2xl cursor-pointer hover:shadow-xl'
                         onClick={() => startEditing(note)}
                     >
                         {editingNoteId === note.id ? (
-                            <div className="w-full flex flex-col flex-wrap items-end" >
-                                <button onClick={() => saveEdit(note.id)} className="w-2/12 text-white bg-green-400 border m-2 p-1 rounded-xl">Save</button>
+                            <div className="min-w-full flex flex-col flex-wrap items-end" >
+                                <button onClick={() => saveEdit(note.id)} className="sm:w-1/4 md:w-2/5 text-white bg-green-400 border m-2 p-1 rounded-xl">Save</button>
                                 <input
                                     className="w-full font-extrabold text-gray-700 focus:outline-none focus:ring-0"
                                     type="text"
@@ -88,7 +85,7 @@ const AllNote: React.FC = () => {
                             </div>
                         ) : (
                             <>
-                                <button onClick={() => handleDelete(note.id)} className="w-2/12 text-white bg-red-400 border m-2 p-1 rounded-xl">Delete</button>
+                                <button onClick={(e) => { e.stopPropagation(); handleDelete(note.id); }} className="sm:w-1/4 md:w-2/5 text-white bg-red-400 border m-2 p-1 rounded-xl">Delete</button>
                                 <div className="w-full flex flex-col items-start p-2">
                                     <h3 className="text-gray-700 font-extrabold">{note.title}</h3>
                                     <p className="text-gray-800 font-medium">
@@ -97,7 +94,7 @@ const AllNote: React.FC = () => {
                                             : `${note.content.substring(0, 200)}...`}
                                     </p>
                                     {note.content.length > 200 && (
-                                        <button onClick={() => toggleFullContent(note.id)}>
+                                        <button onClick={(e) => { e.stopPropagation(); toggleFullContent(note.id); }} className="text-blue-500">
                                             {showFullContent[note.id] ? "Show Less" : "Show More"}
                                         </button>
                                     )}
@@ -107,7 +104,7 @@ const AllNote: React.FC = () => {
                     </div>
                 ))
             ) : (
-                <p>No notes available.</p>
+                <p className="w-full text-center text-gray-500">No notes available.</p>
             )}
         </div>
     );
