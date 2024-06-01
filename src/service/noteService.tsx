@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Base URL of your API
-const API_URL = 'http://13.126.254.217:8000/api/v1/note';
+const API_URL = 'http://13.126.254.217:8001/api/v1/note';
 
 interface ApiResponse {
   message: string;

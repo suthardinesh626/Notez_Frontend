@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://13.126.254.217:8000/api/v1/users';
+const API_URL = 'http://13.126.254.217:8001/api/v1/users';
 
 const registerUser = async (userData: {
     username: string;
